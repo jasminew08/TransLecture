@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ugly Tic-Tac-Toe</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; margin: 20px auto; }
+        .cell { width: 100px; height: 100px; background-color: #ddd; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
+        .cell:hover { background-color: #bbb; }
+    </style>
+</head>
+<body>
+    <h1>Ugly Tic-Tac-Toe</h1>
+    <div id="board" class="board">
+        <!-- Cells will be created by JavaScript -->
+    </div>
+    <button onclick="resetGame()">Reset Game</button>
+    <p id="message"></p>
+
+    <script>
+        const board = document.getElementById('board');
+        const message = document.getElementById('message');
+        let currentPlayer = 'X';
+        let boardState = ['', '', '', '', '', '', '', '', ''];
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6] // Diagonals
+            ];
+
+            for (const pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+                    message.textContent = `${currentPlayer} wins!`;
+                    return true;
+                }
+            }
+            if (boardState.every(cell => cell)) {
+                message.textContent = 'It\'s a draw!';
+                return true;
+            }
+            return false;
+        }
+
+        function handleClick(event) {
+            const cellIndex = Array.from(board.children).indexOf(event.target);
+            if (boardState[cellIndex] || checkWinner()) return;
+
+            boardState[cellIndex] = currentPlayer;
+            event.target.textContent = currentPlayer;
+
+            if (!checkWinner()) {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            }
+        }
+
+        function resetGame() {
+            boardState = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            Array.from(board.children).forEach(cell => cell.textContent = '');
+            message.textContent = '';
+        }
+
+        function createBoard() {
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.addEventListener('click', handleClick);
+                board.appendChild(cell);
+            }
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>
