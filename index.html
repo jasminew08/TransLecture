@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Audio Recorder</title>
+      <style>
+          body {
+              font-family: Arial, sans-serif;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+          }
+          button {
+              margin: 10px;
+              padding: 10px 20px;
+              font-size: 16px;
+          }
+          audio {
+              margin-top: 20px;
+          }
+      </style>
+  </head>
+  <body>
+      <h1>Audio Recorder</h1>
+      <button id="startBtn">Start Recording</button>
+      <button id="stopBtn" disabled>Stop Recording</button>
+      <audio id="audioPlayback" controls></audio>
 
+      <script src="script.js"></script>
+  </body>
+  </html>
