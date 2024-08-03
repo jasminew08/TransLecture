@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Transcription</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #c9f2d4; /* Cream color */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+<script src="script.js" type="module"></script>
+<script>
+  function createNotes(){
+    transcription = document.getElementById("transcriptionText").innerHTML;
+    console.log(transcription);
+    instructions = "Make a bulleted list of notes based on this text and place enter spaces between bullets: "+transcription;
+    console.log(instructions);
+
+    fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer YOUR API KEY'
+              },
+              body: JSON.stringify({
+                  model: 'gpt-3.5-turbo',
+                  messages: [{ role: 'user', content: instructions }],
+                  max_tokens: 500
+              })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.error) {
+                  responseElement.textContent = `Error: ${data.error.message}`;
+              } else {
+                  const reply = data.choices[0].message.content;
+                  document.getElementById("notesText").innerHTML = reply;
+              }
+          })
+  }
+</script>
+</head>
+<body>
+  <div class="container">
+      <h1>TransLecture</h1>
+      <button id="recordButton">Start Recording</button>
+      <h3>Transcription:</h3>
+      <p id="transcriptionText"></p>
+      <button id="notesbutton" onclick="createNotes()">Create notes from transcript</button>
+      <h3>Notes:</h3>
+      <p id="notesText"></p>
+    </div>
+</body>
+</html>
